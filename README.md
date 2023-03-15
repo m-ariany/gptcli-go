@@ -4,6 +4,8 @@
 
 A command line interface (CLI) for ChatGPT written in Go programming language
 
+<img src="https://github.com/m-ariany/chatgpt-cli/blob/master/assets/chatgpt-cli.gif" width="580">
+
 ## Install
 
     go get -u -x github.com/m-ariany/chatgpt-cli
