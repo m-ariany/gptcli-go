@@ -20,6 +20,6 @@ const (
 	DefaultFileMod os.FileMode = 0600
 	// DefaultLogLevel for chatgpt logs.
 	DefaultLogLevel zerolog.Level = zerolog.DebugLevel
-	// DefaultMaxToken to limit model's response token
-	DefaultMaxToken int = 500
+	// DefaultMaxResponseToken to limit model's response token
+	DefaultMaxResponseToken int = 128
 )

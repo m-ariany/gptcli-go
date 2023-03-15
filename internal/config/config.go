@@ -5,16 +5,17 @@ import (
 )
 
 type Config struct {
-	ApiKey   string `env:"OPENAI_API_KEY,required"`
-	MaxToken int    `env:"OPENAI_MAX_TOKEN"`
+	ApiKey           string `env:"OPENAI_API_KEY,required"`
+	MaxResponseToken int    `env:"OPENAI_MAX_RESPONSE_TOKEN"`
 }
 
 // TODO: be replaced by viper
 
 func NewConfig() Config {
 
+	// Set defaults in case the corresponding ENV_VAR is not presented
 	config := Config{
-		MaxToken: DefaultMaxToken,
+		MaxResponseToken: DefaultMaxResponseToken,
 	}
 
 	if err := env.Parse(&config); err != nil {

@@ -18,21 +18,22 @@ import (
 const (
 	IceBreaker = "You (type `exit` to exit): "
 	You        = "You: "
+	ChatGPT    = "ChatGPT🤖: "
 	ErrToUser  = "Oops! ChatGPT failed to responde. Please try again😅"
 )
 
 type Assistant struct {
-	config   config.Config
-	client   *ai.Client
-	maxToken int
-	history  []ai.ChatCompletionMessage
+	config           config.Config
+	client           *ai.Client
+	maxResponseToken int
+	history          []ai.ChatCompletionMessage
 }
 
 func NewAssistant(cnf config.Config) *Assistant {
 	return &Assistant{
-		config:   cnf,
-		client:   ai.NewClient(cnf.ApiKey),
-		maxToken: cnf.MaxToken,
+		config:           cnf,
+		client:           ai.NewClient(cnf.ApiKey),
+		maxResponseToken: cnf.MaxResponseToken,
 		// Typically, a conversation is formatted with a system message first,
 		// followed by alternating user and assistant messages.
 		// Ref: https://platform.openai.com/docs/guides/chat/introduction
@@ -68,36 +69,43 @@ func (a *Assistant) Run() {
 
 func (a *Assistant) chat(prompt string) {
 	req := a.newChatCompletionRequest(prompt)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	a.doChatCompletionStream(ctx, req)
+	answer, err := a.doChatCompletionStream(ctx, req)
+	if !errors.Is(err, io.EOF) {
+		return
+	}
+
+	a.history = append(a.history, ai.ChatCompletionMessage{
+		Role:    "assistant",
+		Content: answer,
+	})
 }
 
-func (a *Assistant) newChatCompletionRequest(prompt string) ai.ChatCompletionRequest {
+func (a *Assistant) newChatCompletionRequest(question string) ai.ChatCompletionRequest {
 
-	msg := ai.ChatCompletionMessage{
-		Role:    "user",
-		Content: prompt,
-	}
 	/*
 		Ref: https://platform.openai.com/docs/guides/chat/introduction
 		Including the conversation history helps the models to give relevant answers to the prior conversation.
 		Because the models have no memory of past requests, all relevant information must be supplied via the conversation.
 	*/
-	a.history = append(a.history, msg)
+	a.history = append(a.history, ai.ChatCompletionMessage{
+		Role:    "user",
+		Content: question,
+	})
 
 	return ai.ChatCompletionRequest{
 		Model:     ai.GPT3Dot5Turbo,
-		MaxTokens: a.maxToken,
+		MaxTokens: a.maxResponseToken,
 		Messages:  a.history,
 		Stream:    true,
 	}
 }
 
-func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatCompletionRequest) {
+func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatCompletionRequest) (answer string, err error) {
 
 	defer func() {
-		writeToStdout(fmt.Sprintf("\n%s", You))
+		writeToStdout(fmt.Sprintf("\n\n%s", You))
 	}()
 
 	resp, err := a.client.CreateChatCompletionStream(ctx, request)
@@ -109,17 +117,27 @@ func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatC
 	}
 	defer resp.Close()
 
-	writeToStdout("ChatGPT: ")
+	writeToStdout(ChatGPT)
+	sb := strings.Builder{}
 	for {
-		data, err := resp.Recv()
+		var data ai.ChatCompletionStreamResponse
+		data, err = resp.Recv()
 		if err != nil {
 			if !errors.Is(err, io.EOF) {
+				// TODO: Answer might be corrupted. Inform user about the error.
 				log.Error().Err(err).Msg("stream error")
+				return
 			}
 			break
 		}
-		writeToStdout(data.Choices[0].Delta.Content)
+		respChunk := data.Choices[0].Delta.Content
+		writeToStdout(respChunk)
+		sb.WriteString(respChunk)
 	}
+
+	answer = sb.String()
+
+	return
 }
 
 func writeToStdout(s string) {
