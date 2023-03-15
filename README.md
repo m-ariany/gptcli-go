@@ -1,4 +1,4 @@
-# go-chatgpt-cli: ChatGPT CLI
+# chatgpt-cli: a command line interface for ChatGPT
 
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
@@ -6,7 +6,7 @@ A command line interface (CLI) for ChatGPT written in Go programming language
 
 ## Install
 
-    go get -u -x github.com/m-ariany/go-chatgpt-cli
+    go get -u -x github.com/m-ariany/chatgpt-cli
 
 ## Request and API Key for OpenAI API
 
