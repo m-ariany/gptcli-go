@@ -87,7 +87,7 @@ func (a *Assistant) newChatCompletionRequest(prompt string) ai.ChatCompletionReq
 	a.history = append(a.history, msg)
 
 	return ai.ChatCompletionRequest{
-		Model:     ai.GPT4,
+		Model:     ai.GPT3Dot5Turbo,
 		MaxTokens: a.maxToken,
 		Messages:  a.history,
 		Stream:    true,
