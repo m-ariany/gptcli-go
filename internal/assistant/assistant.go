@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -116,6 +117,12 @@ func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatC
 		return
 	}
 	defer resp.Close()
+
+	if resp.GetResponse().StatusCode >= 400 {
+		statusCode := resp.GetResponse().StatusCode
+		writeToStdout(fmt.Sprintf("%d %s \n", statusCode, http.StatusText(statusCode)))
+		os.Exit(1)
+	}
 
 	writeToStdout(ChatGPT)
 	sb := strings.Builder{}
