@@ -11,9 +11,8 @@ type Config struct {
 	Model            string `env:"OPENAI_CHAT_COMPLETIONS_MODEL"`
 }
 
-// TODO: be replaced by viper
-
 func NewConfig() Config {
+	var cfg Config
 
 	// Set defaults in case the corresponding ENV_VAR is not presented
 	config := Config{
@@ -25,5 +24,5 @@ func NewConfig() Config {
 		panic(err)
 	}
 
-	return config
+	return cfg
 }
