@@ -1,26 +1,24 @@
 package config
 
 import (
-	"github.com/caarlos0/env/v6"
+	"context"
+
+	"github.com/sethvargo/go-envconfig"
 )
 
 type Config struct {
 	ApiKey           string `env:"OPENAI_API_KEY,required"`
-	MaxResponseToken int    `env:"OPENAI_MAX_RESPONSE_TOKEN"`
+	MaxResponseToken int    `env:"OPENAI_MAX_RESPONSE_TOKEN,default=1048576"`
 }
 
-// TODO: be replaced by viper
-
 func NewConfig() Config {
+	var cfg Config
 
-	// Set defaults in case the corresponding ENV_VAR is not presented
-	config := Config{
-		MaxResponseToken: DefaultMaxResponseToken,
-	}
-
-	if err := env.Parse(&config); err != nil {
+	ctx := context.Background()
+	err := envconfig.Process(ctx, &cfg)
+	if err != nil {
 		panic(err)
 	}
 
-	return config
+	return cfg
 }
