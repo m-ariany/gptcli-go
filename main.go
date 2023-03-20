@@ -8,24 +8,9 @@ import (
 	"github.com/m-ariany/gptcli/internal/config"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/cobra"
-)
-
-const (
-	chatCommand = "chat"
 )
 
 func main() {
-	rootCmd := &cobra.Command{
-		Use:   chatCommand,
-		Short: "ChatGPT CLI",
-		Run:   run,
-	}
-
-	rootCmd.Execute()
-}
-
-func run(cmd *cobra.Command, args []string) {
 	out, err := config.LogOutput()
 	if err != nil {
 		panic(err)
