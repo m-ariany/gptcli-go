@@ -39,6 +39,10 @@ func (shell ChatShell) run(cmd *cobra.Command, args []string) {
 		}
 
 		shell.writeToStdout(shell.AI)
+		for text := range shell.assistant.Chat(statement) {
+			shell.writeToStdout(text)
+		}
+
 		shell.writeToStdout(shell.You)
 	}
 }
