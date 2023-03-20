@@ -6,6 +6,8 @@ import (
 
 	"github.com/m-ariany/gptcli/internal/assistant"
 	"github.com/m-ariany/gptcli/internal/config"
+	"github.com/m-ariany/gptcli/internal/delivery/cli"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
