@@ -5,6 +5,16 @@ import (
 	ai "github.com/sashabaranov/go-openai"
 )
 
+type ChatGPTConfig struct {
+	APIKey           string `env:"CHATGPT_API_KEY,required"`
+	MaxResponseToken int    `env:"CHATGPT_MAX_RESPONSE_TOKEN,default=1048576"`
+}
+
+type ShellConfig struct {
+	You string `env:"SHELL_YOU_PROMPT,default=You"`
+	AI  string `env:"SHELL_AI_PROMPT,default=ChatGPT"`
+}
+
 type Config struct {
 	ApiKey           string `env:"OPENAI_API_KEY,required"`
 	MaxResponseToken int    `env:"OPENAI_MAX_RESPONSE_TOKEN"`

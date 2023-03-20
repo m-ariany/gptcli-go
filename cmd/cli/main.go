@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
+	"github.com/m-ariany/gptcli/internal/adapter/chatgpt"
 	"github.com/m-ariany/gptcli/internal/config"
 	"github.com/m-ariany/gptcli/internal/delivery/cli"
 	"github.com/m-ariany/gptcli/internal/interactor/assistant"
