@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
+	"github.com/m-ariany/gptcli/internal/adapter/chatgpt"
 	"github.com/m-ariany/gptcli/internal/config"
 	"github.com/m-ariany/gptcli/internal/delivery/cli"
 	"github.com/m-ariany/gptcli/internal/interactor/assistant"
@@ -15,11 +16,12 @@ import (
 
 func main() {
 	cfg := config.NewConfig()
-	_ = cfg
 
-	assistant := assistant.New(nil)
+	chatGPT := chatgpt.New()
 
-	shell := cli.New(assistant)
+	assistant := assistant.New(chatGPT)
+
+	shell := cli.New(cfg.Shell, assistant)
 	shell.Run()
 }
 
