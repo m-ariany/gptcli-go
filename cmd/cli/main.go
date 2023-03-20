@@ -6,23 +6,19 @@ import (
 
 	"github.com/m-ariany/gptcli/internal/assistant"
 	"github.com/m-ariany/gptcli/internal/config"
+	"github.com/m-ariany/gptcli/internal/delivery/cli"
+
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
-const (
-	chatCommand = "chat"
-)
-
 func main() {
-	rootCmd := &cobra.Command{
-		Use:   chatCommand,
-		Short: "ChatGPT CLI",
-		Run:   run,
-	}
+	cfg := config.NewConfig()
+	_ = cfg
 
-	rootCmd.Execute()
+	shell := cli.New()
+	shell.Run()
 }
 
 func run(cmd *cobra.Command, args []string) {
