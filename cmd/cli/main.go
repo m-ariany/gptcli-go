@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"runtime/debug"
 
-	"github.com/m-ariany/gptcli/internal/assistant"
 	"github.com/m-ariany/gptcli/internal/config"
 	"github.com/m-ariany/gptcli/internal/delivery/cli"
+	"github.com/m-ariany/gptcli/internal/interactor/assistant"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -17,7 +17,9 @@ func main() {
 	cfg := config.NewConfig()
 	_ = cfg
 
-	shell := cli.New()
+	assistant := assistant.New(nil)
+
+	shell := cli.New(assistant)
 	shell.Run()
 }
 
@@ -43,12 +45,4 @@ func run(cmd *cobra.Command, args []string) {
 
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: out})
 	zerolog.SetGlobalLevel(config.DefaultLogLevel)
-
-	config := loadConfiguration()
-	assistant := assistant.NewAssistant(config)
-	assistant.Run()
-}
-
-func loadConfiguration() config.Config {
-	return config.NewConfig()
 }
