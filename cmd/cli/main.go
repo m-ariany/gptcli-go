@@ -17,7 +17,7 @@ import (
 func main() {
 	cfg := config.NewConfig()
 
-	chatGPT := chatgpt.New()
+	chatGPT := chatgpt.New(cfg.ChatGPT)
 
 	assistant := assistant.New(chatGPT)
 
