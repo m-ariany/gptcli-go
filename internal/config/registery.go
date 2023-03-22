@@ -21,5 +21,5 @@ const (
 	// DefaultLogLevel for chatgpt logs.
 	DefaultLogLevel zerolog.Level = zerolog.DebugLevel
 	// DefaultMaxResponseToken to limit model's response token
-	DefaultMaxResponseToken int = 1024 * 1024
+	DefaultMaxResponseToken int = 128
 )

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -17,15 +18,18 @@ import (
 )
 
 const (
-	IceBreaker = "You (type `exit` to exit): "
+	Instruct   = "Instruct ChatGPT by giving context of conversation: "
+	YouAndExit = `You (write 'exit' to exit): `
 	You        = "You: "
-	ChatGPT    = "ChatGPT🤖: "
-	ErrToUser  = "Oops! ChatGPT failed to responde. Please try again😅"
+	ChatGPT    = "ChatGPT: "
+	ErrToUser  = "Oops! something went wrong, please try again."
 )
 
 type Assistant struct {
 	config           config.Config
 	client           *ai.Client
+	model            string
+	scanner          *bufio.Scanner
 	maxResponseToken int
 	history          []ai.ChatCompletionMessage
 }
@@ -34,28 +38,24 @@ func NewAssistant(cnf config.Config) *Assistant {
 	return &Assistant{
 		config:           cnf,
 		client:           ai.NewClient(cnf.ApiKey),
+		model:            cnf.Model,
+		scanner:          bufio.NewScanner(os.Stdin),
 		maxResponseToken: cnf.MaxResponseToken,
 		// Typically, a conversation is formatted with a system message first,
 		// followed by alternating user and assistant messages.
 		// Ref: https://platform.openai.com/docs/guides/chat/introduction
 		//
 		// TODO: the system instructing message must be taken from the user
-		history: []ai.ChatCompletionMessage{
-			{
-				Role:    "system",
-				Content: "You are a helpful AI that answers my questions to its best knowledge and candor",
-			},
-		},
+		history: []ai.ChatCompletionMessage{},
 	}
 }
 
 func (a *Assistant) Run() {
 
-	writeToStdout(IceBreaker)
-
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		question := strings.TrimSpace(scanner.Text())
+	a.instruct()
+	writeToStdout(YouAndExit)
+	for a.scanner.Scan() {
+		question := strings.TrimSpace(a.scanner.Text())
 		if len(question) < 1 {
 			continue
 		}
@@ -65,6 +65,17 @@ func (a *Assistant) Run() {
 		}
 
 		a.chat(question)
+	}
+}
+
+func (a *Assistant) instruct() {
+	writeToStdout(Instruct)
+	if a.scanner.Scan() {
+		instruction := strings.TrimSpace(a.scanner.Text())
+		a.history = append(a.history, ai.ChatCompletionMessage{
+			Role:    "system",
+			Content: instruction,
+		})
 	}
 }
 
@@ -96,7 +107,7 @@ func (a *Assistant) newChatCompletionRequest(question string) ai.ChatCompletionR
 	})
 
 	return ai.ChatCompletionRequest{
-		Model:     ai.GPT3Dot5Turbo,
+		Model:     a.model,
 		MaxTokens: a.maxResponseToken,
 		Messages:  a.history,
 		Stream:    true,
@@ -112,7 +123,7 @@ func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatC
 	resp, err := a.client.CreateChatCompletionStream(ctx, request)
 
 	if err != nil {
-		log.Error().Err(err)
+		log.Error().Err(err).Msg(err.Error())
 		writeToStdout(ErrToUser)
 		return
 	}
@@ -120,7 +131,8 @@ func (a *Assistant) doChatCompletionStream(ctx context.Context, request ai.ChatC
 
 	if resp.GetResponse().StatusCode >= 400 {
 		statusCode := resp.GetResponse().StatusCode
-		writeToStdout(fmt.Sprintf("%d %s \n", statusCode, http.StatusText(statusCode)))
+		b, _ := ioutil.ReadAll(resp.GetResponse().Body)
+		writeToStdout(fmt.Sprintf("%d %s - %s\n", statusCode, http.StatusText(statusCode), string(b)))
 		os.Exit(1)
 	}
 
