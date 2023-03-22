@@ -17,7 +17,7 @@ type ChatShell struct {
 func New(cfg config.ShellConfig, assistant contract.AssistantInteractor) ChatShell {
 	return ChatShell{
 		You:       fmt.Sprintf("\n\n%s: ", cfg.You),
-		AI:        fmt.Sprintf("\n%s: ", cfg.AI),
+		AI:        fmt.Sprintf("\n%s🤖: ", cfg.AI),
 		assistant: assistant,
 	}
 }
