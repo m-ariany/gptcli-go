@@ -90,8 +90,8 @@ func (server *Server) newChatCompletionRequest(
 	)
 
 	return openai.ChatCompletionRequest{
-		Model:     openai.GPT3Dot5Turbo,
-		MaxTokens: server.cfg.MaxResponseToken,
+		Model:     server.cfg.Model,
+		MaxTokens: server.cfg.MaxTokens,
 		Messages:  server.history,
 		Stream:    true,
 	}

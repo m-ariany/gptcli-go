@@ -7,8 +7,9 @@ import (
 )
 
 type ChatGPTConfig struct {
-	APIKey           string `env:"CHATGPT_API_KEY,required"`
-	MaxResponseToken int    `env:"CHATGPT_MAX_RESPONSE_TOKEN,default=1048576"`
+	APIKey    string `env:"CHATGPT_API_KEY,required"`
+	Model     string `env:"CHATGPT_MODEL,default=gpt-3.5-turbo"`
+	MaxTokens int    `env:"CHATGPT_MAX_TOKENS,default=1048576"`
 }
 
 type ShellConfig struct {
