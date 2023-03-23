@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"runtime/debug"
 
 	"github.com/m-ariany/gptcli/internal/adapter/chatgpt"
 	"github.com/m-ariany/gptcli/internal/config"
