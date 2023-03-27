@@ -9,7 +9,7 @@ import (
 type ChatGPTConfig struct {
 	APIKey    string `env:"CHATGPT_API_KEY,required"`
 	Model     string `env:"CHATGPT_MODEL,default=gpt-3.5-turbo"`
-	MaxTokens int    `env:"CHATGPT_MAX_TOKENS,default=1048576"`
+	MaxTokens int    `env:"CHATGPT_MAX_TOKENS,default=4000"`
 }
 
 type ShellConfig struct {
