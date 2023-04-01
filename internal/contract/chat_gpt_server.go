@@ -3,7 +3,7 @@ package contract
 import (
 	"context"
 
-	"github.com/m-ariany/gptcli/internal/entity"
+	"github.com/hjhussaini/gptcli-go/internal/entity"
 )
 
 type ChatGPTServer interface {
