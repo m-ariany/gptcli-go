@@ -1,4 +1,4 @@
-module github.com/m-ariany/gptcli
+module github.com/hjhussaini/gptcli-go
 
 go 1.19
 

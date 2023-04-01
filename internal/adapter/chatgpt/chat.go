@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/m-ariany/gptcli/internal/entity"
+	"github.com/hjhussaini/gptcli-go/internal/entity"
 
 	"github.com/sashabaranov/go-openai"
 )

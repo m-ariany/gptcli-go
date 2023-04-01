@@ -1,7 +1,7 @@
 package chatgpt
 
 import (
-	"github.com/m-ariany/gptcli/internal/config"
+	"github.com/hjhussaini/gptcli-go/internal/config"
 
 	"github.com/sashabaranov/go-openai"
 )

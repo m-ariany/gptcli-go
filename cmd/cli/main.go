@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/m-ariany/gptcli/internal/adapter/chatgpt"
-	"github.com/m-ariany/gptcli/internal/config"
-	"github.com/m-ariany/gptcli/internal/delivery/cli"
-	"github.com/m-ariany/gptcli/internal/interactor/assistant"
+	"github.com/hjhussaini/gptcli-go/internal/adapter/chatgpt"
+	"github.com/hjhussaini/gptcli-go/internal/config"
+	"github.com/hjhussaini/gptcli-go/internal/delivery/cli"
+	"github.com/hjhussaini/gptcli-go/internal/interactor/assistant"
 )
 
 func main() {
