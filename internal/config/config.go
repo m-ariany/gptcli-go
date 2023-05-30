@@ -6,9 +6,9 @@ import (
 )
 
 type ChatGPTConfig struct {
-	APIKey    string `env:"CHATGPT_API_KEY,required"`
-	Model     string `env:"CHATGPT_MODEL,default=gpt-3.5-turbo"`
-	MaxTokens int    `env:"CHATGPT_MAX_TOKENS,default=0"`
+	APIKey    string `env:"OPENAI_API_KEY,required"`
+	Model     string `env:"OPENAI_MODEL,default=gpt-3.5-turbo"`
+	MaxTokens int    `env:"OPENAI_MAX_TOKENS,default=1024"`
 }
 
 type ShellConfig struct {
