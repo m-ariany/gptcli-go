@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/m-ariany/gptcli/internal/config"
+	"github.com/m-ariany/gptcli-go/internal/config"
 	"github.com/rs/zerolog/log"
 	ai "github.com/sashabaranov/go-openai"
 )
@@ -26,7 +26,7 @@ const (
 )
 
 type Assistant struct {
-	config           config.Config
+	config           config.ChatGPTConfig
 	client           *ai.Client
 	model            string
 	scanner          *bufio.Scanner
@@ -34,13 +34,13 @@ type Assistant struct {
 	history          []ai.ChatCompletionMessage
 }
 
-func NewAssistant(cnf config.Config) *Assistant {
+func NewAssistant(cnf config.ChatGPTConfig) *Assistant {
 	return &Assistant{
 		config:           cnf,
-		client:           ai.NewClient(cnf.ApiKey),
+		client:           ai.NewClient(cnf.APIKey),
 		model:            cnf.Model,
 		scanner:          bufio.NewScanner(os.Stdin),
-		maxResponseToken: cnf.MaxResponseToken,
+		maxResponseToken: cnf.MaxTokens,
 		// Typically, a conversation is formatted with a system message first,
 		// followed by alternating user and assistant messages.
 		// Ref: https://platform.openai.com/docs/guides/chat/introduction

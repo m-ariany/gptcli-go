@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/caarlos0/env/v6"
-	ai "github.com/sashabaranov/go-openai"
+	"context"
+
+	"github.com/sethvargo/go-envconfig"
 )
 
 type ChatGPTConfig struct {
@@ -17,21 +18,16 @@ type ShellConfig struct {
 }
 
 type Config struct {
-	ApiKey           string `env:"OPENAI_API_KEY,required"`
-	MaxResponseToken int    `env:"OPENAI_MAX_RESPONSE_TOKEN"`
-	Model            string `env:"OPENAI_CHAT_COMPLETIONS_MODEL"`
+	ChatGPT ChatGPTConfig
+	Shell   ShellConfig
 }
 
 func NewConfig() Config {
 	var cfg Config
 
-	// Set defaults in case the corresponding ENV_VAR is not presented
-	config := Config{
-		MaxResponseToken: DefaultMaxResponseToken,
-		Model:            ai.GPT3Dot5Turbo,
-	}
-
-	if err := env.Parse(&config); err != nil {
+	ctx := context.Background()
+	err := envconfig.Process(ctx, &cfg)
+	if err != nil {
 		panic(err)
 	}
 

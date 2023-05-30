@@ -1,7 +1,7 @@
 package assistant
 
 import (
-	"github.com/hjhussaini/gptcli-go/internal/contract"
+	"github.com/m-ariany/gptcli-go/internal/contract"
 )
 
 type Assistant struct {

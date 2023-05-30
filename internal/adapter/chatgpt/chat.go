@@ -2,13 +2,13 @@ package chatgpt
 
 import (
 	"context"
-	"fmt"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
 
-	"github.com/hjhussaini/gptcli-go/internal/entity"
+	"github.com/m-ariany/gptcli-go/internal/entity"
 
 	"github.com/sashabaranov/go-openai"
 )

@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/hjhussaini/gptcli-go/internal/config"
+	"github.com/m-ariany/gptcli-go/internal/config"
 
-	"github.com/hjhussaini/gptcli-go/internal/contract"
+	"github.com/m-ariany/gptcli-go/internal/contract"
 )
 
 type ChatShell struct {
