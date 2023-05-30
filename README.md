@@ -1,14 +1,14 @@
-# chatgpt-cli: a command line interface for ChatGPT
+# gptcli-go: a command line interface for ChatGPT
 
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 A command line interface (CLI) for ChatGPT written in Go programming language
 
-<img src="https://github.com/m-ariany/chatgpt-cli/blob/master/assets/gptcli-go-go.gif" width="580">
+<img src="https://github.com/m-ariany/gptcli-go/blob/master/assets/gptcli-go-go.gif" width="580">
 
 ## Install
 
-    go get -u -x github.com/m-ariany/chatgpt-cli
+    go get -u -x github.com/m-ariany/gptcli-go
 
 ## Request and API Key for OpenAI API
 
@@ -17,7 +17,7 @@ Request your OpenAPI key in [https://beta.openai.com/account/api-keys](https://b
 ## How to run?
 
     $ export OPENAI_API_KEY=<YOUR_OPENAI_API_KEY>
-    $ chatgpt-cli
+    $ gptcli-go
 
 ## Contributions Guideline
 
